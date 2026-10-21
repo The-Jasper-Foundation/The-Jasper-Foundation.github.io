@@ -5,57 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Jasper Galton-Fenzi</title>
 <meta name="description" content="Jasper Galton-Fenzi: AI student at Anglia Ruskin University, Cambridge. Projects, open-source work and experience.">
-<style>
-  :root {
-    --bg: #fbfaf7;
-    --text: #1f2328;
-    --muted: #5f6670;
-    --line: #e3e0d8;
-    --accent: #1b3a5c;
-    --tag-bg: #eef1f5;
-    --code-bg: #f1efe9;
-  }
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) {
-      --bg: #15181c;
-      --text: #e6e8eb;
-      --muted: #9aa3ad;
-      --line: #2b3038;
-      --accent: #8fb8e8;
-      --tag-bg: #222831;
-      --code-bg: #1f242b;
-    }
-  }
-  * { box-sizing: border-box; }
-  body {
-    margin: 0;
-    background: var(--bg);
-    color: var(--text);
-    font: 17px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  }
-  .wrap { max-width: 720px; margin: 0 auto; padding: 48px 16px 64px; }
-  header h1 { font-size: 2rem; margin: 0 0 4px; letter-spacing: -0.01em; }
-  header p.sub { margin: 0 0 16px; color: var(--muted); }
-  nav { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 0.95rem; }
-  a { color: var(--accent); text-underline-offset: 3px; }
-  a:hover { text-decoration-thickness: 2px; }
-  h2 {
-    font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.08em;
-    color: var(--muted); margin: 48px 0 8px; padding-bottom: 6px; border-bottom: 1px solid var(--line);
-  }
-  article { padding: 18px 0; border-bottom: 1px solid var(--line); }
-  article:last-of-type { border-bottom: none; }
-  article h3 { font-size: 1.1rem; margin: 0; }
-  .meta { color: var(--muted); font-size: 0.9rem; margin: 2px 0 8px; }
-  article p { margin: 0 0 10px; }
-  .tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0; padding: 0; list-style: none; }
-  .tags li { background: var(--tag-bg); border-radius: 4px; padding: 1px 8px; font-size: 0.8rem; }
-  .links { font-size: 0.95rem; display: flex; flex-wrap: wrap; gap: 4px 16px; }
-  code { background: var(--code-bg); padding: 1px 5px; border-radius: 4px; font-size: 0.9em; }
-  ul.plain { padding-left: 20px; margin: 0; }
-  ul.plain li { margin-bottom: 6px; }
-  footer { margin-top: 48px; color: var(--muted); font-size: 0.85rem; }
-</style>
+<link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
 <div class="wrap">
@@ -68,8 +18,8 @@
     <a href="#projects">Projects</a>
     <a href="#experience">Experience</a>
     <a href="https://github.com/The-Jasper-Foundation">GitHub</a>
-    <a href="https://www.linkedin.com/in/jasper-julian-g-227418b2">LinkedIn</a>
     <a href="mailto:galtonfenzijasper@gmail.com">Email</a>
+    <span class="meta" style="margin:0">LinkedIn: search “Jasper Galton-Fenzi”</span>
   </nav>
 </header>
 
@@ -83,54 +33,66 @@
 <section id="projects">
   <h2>Projects</h2>
 
-  <article>
-    <h3>Arm MCP Server: open-source fix</h3>
-    <p class="meta">October 2026 · merged into arm/mcp</p>
-    <p>I ran Arm's official MCP server locally and called its tools directly with MCP Inspector, with no AI in the loop. The <code>mca</code> tool's <code>triple</code> option always failed: the code passed <code>--triple</code> to llvm-mca, but the real flag is <code>--mtriple</code>.</p>
-    <p>I traced it to one line, submitted the fix with a regression test that fails without the fix and passes with it, ran Arm's test suite locally, and Arm merged it into main. I also compared <code>-O0</code> and <code>-O2</code> AArch64 code on a Neoverse V2 model: about 12× faster per element at <code>-O2</code>.</p>
-    <ul class="tags"><li>Python</li><li>Docker</li><li>LLVM (llvm-mca)</li><li>MCP</li><li>pytest</li><li>Git</li></ul>
-    <div class="links">
-      <a href="https://github.com/The-Jasper-Foundation/arm-mcp-lab">Write-up</a>
-      <a href="https://github.com/arm/mcp/pull/228">Pull request #228</a>
-      <a href="https://github.com/arm/mcp/pull/235">Merged as #235</a>
+  <div class="project">
+    <a href="projects/arm-mcp.html"><img src="assets/img/arm-mcp.svg" alt="Terminal showing --triple failing and --mtriple working"></a>
+    <div>
+      <h3><a href="projects/arm-mcp.html">Arm MCP Server: open-source fix</a></h3>
+      <p class="meta">October 2026 · merged into arm/mcp</p>
+      <p>Found that the <code>mca</code> tool in Arm's MCP server passed the wrong flag to llvm-mca, so one of its options had never worked. Fixed it, added a regression test, and Arm merged it into main.</p>
+      <ul class="tags"><li>Python</li><li>Docker</li><li>LLVM</li><li>MCP</li><li>pytest</li></ul>
+      <div class="links">
+        <a href="projects/arm-mcp.html">Read more</a>
+        <a href="https://github.com/arm/mcp/pull/235" target="_blank" rel="noopener">Merged PR</a>
+      </div>
     </div>
-  </article>
+  </div>
 
-  <article>
-    <h3>Tracing an AI configuration tool (Clear-Com internship)</h3>
-    <p class="meta">June – September 2026</p>
-    <p>I worked on an AI feature that lets users set up intercom systems by chatting. I added OpenTelemetry tracing to a TypeScript MCP server and its AI client, sending it to a self-hosted Langfuse stack in Docker, so developers could see every tool call's inputs, cost and time. Along the way I found three places where the system reported success without doing the work.</p>
-    <ul class="tags"><li>TypeScript</li><li>MCP</li><li>OpenTelemetry</li><li>Langfuse</li><li>Docker</li><li>SSH</li></ul>
-    <div class="links"><span class="meta">Company code, so no public link.</span></div>
-  </article>
-
-  <article>
-    <h3>The Sniff Test</h3>
-    <p class="meta">September 2026 · live</p>
-    <p>A web page that flags scam and high-pressure sales tactics in text you paste in. It runs entirely in the browser using pattern matching, so nothing you paste is sent anywhere. It's the first project I built from scratch and finished.</p>
-    <ul class="tags"><li>JavaScript</li><li>HTML</li><li>CSS</li><li>GitHub Pages</li></ul>
-    <div class="links">
-      <a href="https://the-jasper-foundation.github.io/Sniff-Test/">Try it</a>
-      <a href="https://github.com/The-Jasper-Foundation/Sniff-Test">Code</a>
+  <div class="project">
+    <a href="projects/clearcom-tracing.html"><img src="assets/img/clearcom.svg" alt="Trace timeline of an AI agent's tool calls"></a>
+    <div>
+      <h3><a href="projects/clearcom-tracing.html">Tracing an AI configuration tool</a></h3>
+      <p class="meta">June – September 2026 · Clear-Com internship</p>
+      <p>Added tracing to an AI feature that configures intercom systems by chat, so developers could see every tool call's inputs, cost and time. Found three places where the system said "success" without doing the work.</p>
+      <ul class="tags"><li>TypeScript</li><li>MCP</li><li>OpenTelemetry</li><li>Langfuse</li><li>Docker</li></ul>
+      <div class="links"><a href="projects/clearcom-tracing.html">Read more</a></div>
     </div>
-  </article>
+  </div>
 
-  <article>
-    <h3>SnapCal</h3>
-    <p class="meta">2026 · prototype</p>
-    <p>Take a photo of a printed timetable and SnapCal reads the dates with on-device text recognition and adds them to your calendar. It works offline and currently runs on macOS.</p>
-    <ul class="tags"><li>Flutter</li><li>Dart</li><li>Google ML Kit</li></ul>
-  </article>
+  <div class="project">
+    <a href="projects/sniff-test.html"><img src="assets/img/sniff-test.svg" alt="Pasted message with a pressure tactic highlighted"></a>
+    <div>
+      <h3><a href="projects/sniff-test.html">The Sniff Test</a></h3>
+      <p class="meta">September 2026 · live</p>
+      <p>A web page that flags scam and high-pressure sales tactics in text you paste in. Runs entirely in your browser, so nothing is sent anywhere.</p>
+      <ul class="tags"><li>JavaScript</li><li>HTML</li><li>CSS</li></ul>
+      <div class="links">
+        <a href="projects/sniff-test.html">Read more</a>
+        <a href="https://the-jasper-foundation.github.io/Sniff-Test/" target="_blank" rel="noopener">Try it</a>
+      </div>
+    </div>
+  </div>
 
-  <article>
-    <h3>University team projects</h3>
-    <p class="meta">2026 · in progress</p>
-    <ul class="plain">
-      <li><strong>Software Engineering:</strong> project lead and developer on a five-person team building a C# web app, due December 2026. I picked SQLite so the whole team could develop on macOS.</li>
-      <li><strong>Database Design:</strong> designing and building a hospital management database in SQL with my team.</li>
-    </ul>
-    <ul class="tags"><li>C#</li><li>SQL</li><li>SQLite</li><li>GitHub</li></ul>
-  </article>
+  <div class="project">
+    <a href="projects/snapcal.html"><img src="assets/img/snapcal.svg" alt="Photo of a timetable turned into calendar events"></a>
+    <div>
+      <h3><a href="projects/snapcal.html">SnapCal</a></h3>
+      <p class="meta">2026 · prototype</p>
+      <p>Take a photo of a printed timetable and SnapCal reads the dates with on-device text recognition and adds them to your calendar. Works offline.</p>
+      <ul class="tags"><li>Flutter</li><li>Dart</li><li>Google ML Kit</li></ul>
+      <div class="links"><a href="projects/snapcal.html">Read more</a></div>
+    </div>
+  </div>
+
+  <div class="project">
+    <img src="assets/img/uni.svg" alt="Database tables linked together">
+    <div>
+      <h3>University team projects</h3>
+      <p class="meta">2026 · in progress</p>
+      <p><strong>Software Engineering:</strong> project lead and developer on a five-person team building a C# web app, due December 2026. I picked SQLite so the whole team could develop on macOS.</p>
+      <p><strong>Database Design:</strong> designing and building a hospital management database in SQL with my team.</p>
+      <ul class="tags"><li>C#</li><li>SQL</li><li>SQLite</li><li>GitHub</li></ul>
+    </div>
+  </div>
 </section>
 
 <section id="experience">
@@ -142,9 +104,7 @@
   </ul>
 </section>
 
-<footer>
-  <p>Last updated 21 October 2026</p>
-</footer>
+<footer><p>Last updated October 2026</p></footer>
 
 </div>
 </body>

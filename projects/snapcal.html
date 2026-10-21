@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SnapCal · Jasper Galton-Fenzi</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<div class="wrap narrow">
+<header>
+  <h1><a href="../index.html">Jasper Galton-Fenzi</a></h1>
+</header>
+<a class="back" href="../index.html#projects">← All projects</a>
+<h3 style="font-size:1.6rem">SnapCal</h3>
+<p class="meta">2026 · prototype</p>
+<ul class="tags"><li>Flutter</li><li>Dart</li><li>Google ML Kit</li><li>macOS</li></ul>
+<div class="links"></div>
+<div class="hero"><img src="../assets/img/snapcal.svg" alt="Photo of a timetable turned into calendar events"></div>
+
+<h2>What it does</h2>
+<p>Take a photo of a printed timetable or schedule, and SnapCal reads the dates and times and adds them to your calendar. It works offline, because the text recognition runs on the device.</p>
+
+<h2>How it works</h2>
+<ul class="plain">
+  <li><code>image_picker</code> to take or choose a photo.</li>
+  <li><code>google_mlkit_text_recognition</code> for on-device text recognition (OCR).</li>
+  <li>Parsing logic to turn recognised text into dates and times.</li>
+  <li><code>add_2_calendar</code> to create the events, and <code>shared_preferences</code> for settings.</li>
+</ul>
+
+<h2>A bug worth remembering</h2>
+<p>The macOS build kept failing code signing. The cause was the project folder being synced by iCloud, which adds hidden file attributes that the signing step rejects. Moving the project out of iCloud fixed it.</p>
+
+<h2>Status</h2>
+<p>A working prototype on macOS, paused while I focus on my studies and applications. It's meant to be the first step of a bigger app that gathers calendars and notes in one place.</p>
+
+<footer><p><a href="../index.html#projects">← All projects</a></p></footer>
+</div>
+</body>
+</html>

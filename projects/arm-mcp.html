@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Arm MCP Server: open-source fix · Jasper Galton-Fenzi</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<div class="wrap narrow">
+<header>
+  <h1><a href="../index.html">Jasper Galton-Fenzi</a></h1>
+</header>
+<a class="back" href="../index.html#projects">← All projects</a>
+<h3 style="font-size:1.6rem">Arm MCP Server: open-source fix</h3>
+<p class="meta">October 2026 · merged into arm/mcp main</p>
+<ul class="tags"><li>Python</li><li>Docker</li><li>LLVM (llvm-mca)</li><li>MCP Inspector</li><li>pytest</li><li>Git</li></ul>
+<div class="links"><a href="https://github.com/The-Jasper-Foundation/arm-mcp-lab" target="_blank" rel="noopener">Write-up</a><a href="https://github.com/arm/mcp/pull/228" target="_blank" rel="noopener">Pull request #228</a><a href="https://github.com/arm/mcp/pull/235" target="_blank" rel="noopener">Merged as #235</a></div>
+<div class="hero"><img src="../assets/img/arm-mcp.svg" alt="Terminal showing --triple failing and --mtriple working"></div>
+
+<h2>What I did</h2>
+<p>Arm publishes an MCP server: a set of tools an AI assistant can call, including <code>mca</code>, which predicts how fast a piece of assembly runs on an Arm CPU. It was my first time using Arm software, so I ran it locally in Docker and called each tool directly with MCP Inspector, with no AI in the loop, to see what it really does.</p>
+
+<h2>The bug</h2>
+<p>Filling in the tool's <code>triple</code> option (which Arm CPU family to target) always failed:</p>
+<pre><code>llvm-mca: Unknown command line argument '--triple'.
+llvm-mca: Did you mean '--mtriple'?
+llvm-mca: Too many positional arguments specified!</code></pre>
+<p>The response showed the exact command the server had run, which led me to one line in <code>llvm_mca_tool.py</code>: it passed <code>--triple</code>, but llvm-mca's flag is <code>--mtriple</code>. Because the flag wasn't recognised, the value after it was read as a second input file. The option had never worked since the first release, and no test covered it.</p>
+
+<h2>The fix and the test</h2>
+<ul class="plain">
+  <li>Changed one word, <code>--triple</code> to <code>--mtriple</code>, and opened a pull request.</li>
+  <li>Arm's reviewers asked for a regression test, so I added one to their integration suite. It calls <code>mca</code> with <code>triple="aarch64"</code> and <code>cpu="neoverse-v2"</code>, and checks both that the call succeeds and that <code>--mtriple</code> is in the command.</li>
+  <li>Built their Docker image locally with my change and ran their full test suite: all passed, including 50/50 knowledge-base smoke questions.</li>
+  <li>Ran the new test against the released image without my fix: it failed as expected. A test that can't fail isn't worth much.</li>
+  <li>Arm moved the change through their internal review process and merged it into main.</li>
+</ul>
+
+<h2>Using the tool: -O0 vs -O2</h2>
+<p>I also used llvm-mca to compare a simple C loop compiled with optimisation off (<code>-O0</code>) and on (<code>-O2</code>), on a Neoverse V2 model:</p>
+<table>
+  <tr><th>Comparison</th><th>-O0</th><th>-O2</th></tr>
+  <tr><td>Whole function</td><td>474 cycles</td><td>403 cycles (looks ~15% faster)</td></tr>
+  <tr><td>Loop body, per number added</td><td>3.08 cycles</td><td>0.26 cycles (~12× faster)</td></tr>
+</table>
+<p>The whole-function number hides the real gain, because llvm-mca runs every line once per pass and the <code>-O2</code> code has extra setup around a vector loop. One surprise: IPC went <em>down</em> while the code got faster, because one vector instruction does four additions. IPC measures how busy the CPU is, not how much useful work it does.</p>
+
+<h2>What I learned</h2>
+<ul class="plain">
+  <li>Test the tool, not the description of the tool.</li>
+  <li>Fork, branch, pull request, merge conflicts, and how a large project reviews outside contributions.</li>
+  <li>A good regression test fails without the fix and passes with it.</li>
+</ul>
+
+<footer><p><a href="../index.html#projects">← All projects</a></p></footer>
+</div>
+</body>
+</html>

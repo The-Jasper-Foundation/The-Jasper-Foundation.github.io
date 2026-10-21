@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tracing an AI configuration tool · Jasper Galton-Fenzi</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<div class="wrap narrow">
+<header>
+  <h1><a href="../index.html">Jasper Galton-Fenzi</a></h1>
+</header>
+<a class="back" href="../index.html#projects">← All projects</a>
+<h3 style="font-size:1.6rem">Tracing an AI configuration tool</h3>
+<p class="meta">June – September 2026 · Software Engineering Intern, Clear-Com</p>
+<ul class="tags"><li>TypeScript</li><li>Node.js</li><li>MCP</li><li>OpenTelemetry</li><li>Langfuse</li><li>Docker</li><li>SSH</li><li>Linux</li></ul>
+<div class="links"></div>
+<div class="hero"><img src="../assets/img/clearcom.svg" alt="Trace timeline of an AI agent's tool calls"></div>
+
+<h2>The project</h2>
+<p>Clear-Com makes intercom systems used in broadcast and live events. The team was building an AI feature that lets users set up a system by chatting, for example "create a channel called Stage Left", instead of clicking through settings. The AI does this by calling tools exposed through MCP.</p>
+<p>The problem: when the AI did something wrong, nobody could see why. Which tool did it pick? With what inputs? How much did it cost?</p>
+
+<h2>What I built</h2>
+<ul class="plain">
+  <li>Added OpenTelemetry tracing to a TypeScript MCP server and to the AI client that calls it, and sent the traces to a self-hosted Langfuse stack running in Docker.</li>
+  <li>The result: every request shows as one timeline, with the model call, its tokens and cost, and each tool call with its inputs and result.</li>
+  <li>The device that runs the server is locked down and only reachable over SSH, so I set up a reverse SSH tunnel and scripts to get its traces out to the dashboard.</li>
+  <li>Wrote a test plan to check that the AI path and the normal web path give the same result for the same action.</li>
+</ul>
+
+<h2>What I found</h2>
+<p>With every call visible, I found three places where the system reported success without actually doing the work, including a call that dropped entries but returned no error. I also caught an example config that would have sent configuration data to a third-party cloud.</p>
+
+<h2>What I learned</h2>
+<ul class="plain">
+  <li>"It said success" isn't proof. Check the actual state.</li>
+  <li>Observability is what turns "the AI is acting weird" into a specific, fixable bug.</li>
+  <li>Writing handover documents so the next intern can pick the work up.</li>
+</ul>
+<p class="meta">This is company code, so there's no public repository.</p>
+
+<footer><p><a href="../index.html#projects">← All projects</a></p></footer>
+</div>
+</body>
+</html>
